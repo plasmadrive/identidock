@@ -32,14 +32,13 @@ logspout:
 logstash:
   image: logstash:1.5
   volumes:
-    - ./logstash.conf:/etc/logstash.conf
+    - ./logstash.conf:/etc/logstash/conf.d/logstash.conf
   environment:
     LOGSPOUT: ignore
-  ports:
-    - "127.0.0.1:5544:5544"
+
   links:
     - elasticsearch
-  command: logstash  -f /etc/logstash.conf
+#  command: logstash  -f /etc/logstash.conf
 
 elasticsearch:
   image: elasticsearch:1.7
