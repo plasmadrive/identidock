@@ -20,7 +20,7 @@ redis:
   image: redis
 
 logspout:
-  image: amouat/logspout-logstash
+  image: plasmadrive/logspout-logstash
   volumes:
     - /var/run/docker.sock:/tmp/docker.sock
   ports:
@@ -28,32 +28,25 @@ logspout:
   links:
     - logstash
   command: logstash://logstash:5000
-
 logstash:
   image: logstash:1.5
   volumes:
-    - ./logstash.conf:/etc/logstash/conf.d/logstash.conf
+    - ./logstash.conf:/etc/logstash.conf
   environment:
-    LOGSPOUT: ignore
-
+   LOGSPOUT: ignore
   links:
     - elasticsearch
-#  command: logstash  -f /etc/logstash.conf
-
+  command: logstash -f /etc/logstash.conf
 elasticsearch:
   image: elasticsearch:1.7
   environment:
     LOGSPOUT: ignore
-  ports:
-    - "9200:9200"
-
 kibana:
   image: kibana:4.1
-  environment:
+  environment: 
     LOGSPOUT: ignore
     ELASTICSEARCH_URL: http://elasticsearch:9200
   links:
     - elasticsearch
   ports:
     - "5601:5601"
-  
